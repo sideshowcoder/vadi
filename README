@@ -1,8 +1,21 @@
 VADI - Vermont Analyse Data Interface
 =====================================
 
+Run
+---
+<code>
+  $ python main.py
+</code>
+
+Configuration
+-------------
+* db\_user: user used to access the Database
+* db\_pass: password used to access the Database
+* db\_name: database name
+* debug: run in debug mode
+
 Dependencies
 ------------
-PyYAML
-MySQL-python
-bottle
+* PyYAML
+* MySQL-python
+* bottle

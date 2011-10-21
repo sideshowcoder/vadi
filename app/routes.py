@@ -1,7 +1,7 @@
-from bottle import route
+from bottle import route, get, post, request
 from conf import config
 
-@route('/', method='GET')
+@get('/')
 def index():
     html = '<html><head></head><body>'
     html += '<h1>Vermont Analyse Data Interface</h1>'

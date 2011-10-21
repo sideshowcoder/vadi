@@ -1,3 +1,6 @@
 db_user: user
 db_pass: password
+db_name: dbname
+port: 9080
+host: 127.0.0.1
 debug: True
