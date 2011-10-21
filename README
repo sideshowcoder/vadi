@@ -1,0 +1,8 @@
+VADI - Vermont Analyse Data Interface
+=====================================
+
+Dependencies
+------------
+PyYAML
+MySQL-python
+bottle
