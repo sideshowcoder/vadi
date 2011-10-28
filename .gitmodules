@@ -1,0 +1,3 @@
+[submodule "lib/flowalyzer"]
+	path = lib/flowalyzer
+	url = https://github.com/constcast/flowalyzer.git
