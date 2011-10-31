@@ -19,6 +19,9 @@ Dependencies
 * PyYAML
 * MySQL-python
 * bottle
+* PIL
+* matplotlib
+
 =======
 PyYAML
 bottle
@@ -27,3 +30,4 @@ Dependencies from flowalyzer
 ----------------------------
 
 MySQL-python
+PyGreSQL
