@@ -1,5 +1,5 @@
-VADI - Vermont Analyse Data Interface
-=====================================
+VADI - Vermont Analyser Data Interface
+======================================
 
 Run
 ---
@@ -19,3 +19,11 @@ Dependencies
 * PyYAML
 * MySQL-python
 * bottle
+=======
+PyYAML
+bottle
+ 
+Dependencies from flowalyzer
+----------------------------
+
+MySQL-python
