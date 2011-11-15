@@ -10,18 +10,22 @@
   <link href="/static/css/jquery-ui.css" rel="stylesheet" type="text/css"/>  
   <script type="text/javascript" src="/static/js/libs/jquery.js"></script>
   <script type="text/javascript" src="/static/js/libs/jquery-ui.min.js"></script>
+  <script type="text/javascript" src="/static/js/libs/d3.min.js"></script>
   <script type="text/javascript" src="/static/js/app.js"></script>          
 </head>
 
 <body>
-  <div class='two-col'>
-    <div id='header'>
+  <div class="two-col">
+    <div id="header">
       <h1>Vadi - Vermont analyse data interface</h1>
     </div>
-    <div id='sidebar'>
+    <div id="sidebar">
       <ul>
         <li>
-          <a id="analysebtn" href='#'>Analyse</a>
+          <a id="analysebtn" href="#">Analyse</a>
+        </li>
+        <li>
+          <a id="toggleviewbtn" href="#">Switch to Dynamic View</a>
         </li>
         <li>
           <div id="progress"></div>
@@ -29,7 +33,7 @@
         </li>
       </ul>
     </div>
-    <div id='content'>      
+    <div id="content">      
     </div>
   </div>
 </body>
