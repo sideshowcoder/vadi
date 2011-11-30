@@ -6,8 +6,7 @@ import os.path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'lib'))
 
 # import bottle framework
-from bottle import TEMPLATE_PATH, get, run, debug, template, request, validate, static_file, error
-TEMPLATE_PATH.insert(0, os.path.join(os.path.dirname(__file__), "views"))
+from bottle import get, run, debug, template, request, validate, static_file, error
 
 # parse the config
 from yaml import load
@@ -16,7 +15,11 @@ config = load(file(os.path.join(os.path.dirname(__file__), "config.yml")))
 # define routes
 @get("/")
 def index():
-    return template("index")
+    return static_file("index.html",root=os.path.join(os.path.dirname(__file__),"static"))
+
+@get("/charts/:chart#.+#")
+def server_chart(chart):
+    return static_file(chart,root=os.path.join(os.path.dirname(__file__),"chart"))
 
 @get("/static/:path#.+#")
 def server_static(path):
