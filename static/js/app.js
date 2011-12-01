@@ -2,13 +2,13 @@
   // start once the DOM is ready
   $(function(){
 
-    window.rowNum = 0;
+    window.rowId = 0;
     
     // Backbone Models
     window.ChartRow = Backbone.Model.extend({
       initialize: function(attributes){
         this.set({
-          rowNum: rowNum++,
+          rowId: rowId++,
           shortUrlBase: attributes.shortUrl,
           midUrlBase: attributes.midUrl,
           longUrlBase: attributes.longUrl,
@@ -45,7 +45,7 @@
       events:{},
 
       modelChanged: function(chartrow){
-        var row = $("#rownum-" + chartrow.get("rowNum"));
+        var row = $("#row-" + chartrow.get("rowId"));
         var shrt = row.children(".chart-short");
         var lng = row.children(".chart-long");
         var md = row.children(".chart-mid");
