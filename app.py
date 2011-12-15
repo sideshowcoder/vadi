@@ -4,6 +4,7 @@
 import sys
 import os.path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'lib'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'app'))
 
 # import bottle framework
 from bottle import get, run, debug, template, request, validate, static_file, error
@@ -24,6 +25,19 @@ def server_chart(chart):
 @get("/static/:path#.+#")
 def server_static(path):
     return static_file(path,root=os.path.join(os.path.dirname(__file__),"static"))
+
+@get("/subnet-report/imgs/:path#.+#")
+def subnet_report_imgs(path):
+    return static_file(path, root=os.path.join(os.path.dirname(__file__),"imgs"))
+
+@get("/subnet-report/:report#.+#")
+def server_subnetgraphs(report):
+    if "subnetDir" in config:
+        workdir = config['subnetDir']
+    else:
+        workdir = os.path.join("workdir", "SubnetGrapher")
+    from subnetgraphing import show_subnet_reports
+    return show_subnet_reports(report, workdir)
 
 # start server
 if __name__ == "__main__":
