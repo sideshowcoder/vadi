@@ -1,20 +1,17 @@
 (function($){
   // start once the DOM is ready
   $(function(){
-
-    window.rowId = 0;
     
     // Backbone Models
-    window.ChartRow = Backbone.Model.extend({
+    window.rowId = 0;
+
+    window.Chart = Backbone.Model.extend({
+
       initialize: function(attributes){
         this.set({
           rowId: rowId++,
-          shortUrlBase: attributes.shortUrl,
-          midUrlBase: attributes.midUrl,
-          longUrlBase: attributes.longUrl,
-          shortUrl: attributes.shortUrl,
-          midUrl: attributes.midUrl,
-          longUrl: attributes.longUrl,
+          chartUrlBase: attributes.chartUrl,
+          chartUrl: attributes.chartUrl,
           descHeader: attributes.descHeader,
           descText: attributes.descText 
         });
@@ -22,39 +19,33 @@
 
       refresh: function(){
         var date = new Date();
-        this.set({shortUrl: this.get("shortUrlBase") + "?v=" + date.getTime()});
-        this.set({midUrl: this.get("midUrlBase") + "?v=" + date.getTime()});
-        this.set({longUrl: this.get("longUrlBase") + "?v=" + date.getTime()});
+        this.set({chartUrl: this.get("chartUrlBase") + "?v=" + date.getTime()});
       }
     });
     
     window.ChartList = Backbone.Collection.extend({
-      model: ChartRow
+      model: Chart
     });
-
-    window.Charts = new ChartList;
-     
+ 
     // Backbone Views
-    window.ChartRowView = Backbone.View.extend({
+    window.Charts = new ChartList;
+    
+    window.ChartView = Backbone.View.extend({
+      chart: null,
+
       tagName: "div",
 
-      className: "chart-row",
+      className: "chart",
 
-      template: _.template($("#chartrow-template").html()),
+      template: _.template($("#chart-template").html()),
 
       events:{},
 
-      modelChanged: function(chartrow){
-        var row = $("#row-" + chartrow.get("rowId"));
-        var shrt = row.children(".chart-short");
-        var lng = row.children(".chart-long");
-        var md = row.children(".chart-mid");
-        shrt.children("a").attr("href", chartrow.get("shortUrl"));
-        lng.children("a").attr("href", chartrow.get("longUrl"));
-        md.children("a").attr("href", chartrow.get("midUrl"));
-        shrt.children("a").children("img").attr("src", chartrow.get("shortUrl"));
-        lng.children("a").children("img").attr("src", chartrow.get("longUrl"));
-        md.children("a").children("img").attr("src", chartrow.get("midUrl"));
+      modelChanged: function(){
+        if(this.chart === null || this.chart === undefined ) { return };
+        var chart = $("#row-" + this.chart.get("rowId"));
+        chart.children("image").children("a").attr("href", this.chart.get("chartUrl"));
+        chart.children("image").children("a").children("img").attr("src", this.chart.get("chartUrl"));
       },
 
       initialize: function(attributes){
@@ -65,67 +56,76 @@
         $(this.el).html(this.template(this.model.toJSON()));
         return this;
       }
+
     });
+
+    Charts.bind("add", function(chart){
+      var view = new ChartView({ model: chart });
+      // Associate view and Model
+      chart.set({view: view});
+      view.chart = chart;
+      $("#charts").append(view.render().el);
+      $("a.lightbox").lightBox({
+        imageLoading:	"/static/img/lightbox-ico-loading.gif",
+        imageBtnPrev:	"/static/img/lightbox-btn-prev.gif",	 
+        imageBtnNext: "/static/img/lightbox-btn-next.gif",	 
+        imageBtnClose: "/static/img/lightbox-btn-close.gif",
+        imageBlank:		 "/static/img/lightbox-blank.gif"
+      });
+    });
+
+    Charts.bind("remove", function(chart){
+      if(typeof chart.get("view").remove ===  "function"){
+        chart.get("view").remove();
+      }
+    });
+        
 
     window.AppView = Backbone.View.extend({
-      el: $("#vadigui"),
-      tid: null,
 
-      addChart: function(chartrow){
-        var view = new ChartRowView({ model: chartrow });
-        this.$("#charts").append(view.render().el);
-        $("a.lightbox").lightBox({
-          imageLoading:	"/static/img/lightbox-ico-loading.gif",
-          imageBtnPrev:	"/static/img/lightbox-btn-prev.gif",	 
-          imageBtnNext: "/static/img/lightbox-btn-next.gif",	 
-          imageBtnClose: "/static/img/lightbox-btn-close.gif",
-          imageBlank:		 "/static/img/lightbox-blank.gif"
+      clearCharts: function(){
+        for(var i = Charts.length-1; Charts.remove(Charts.at(i)), i >= 0 ; --i);;
+      },
+
+      refreshCharts: function(){
+        Charts.each(function(chart){
+          chart.refresh();
         });
-      },
-
-      addAllCharts: function(){
-        Charts.each(this.addChart);
-      },
-
-      refreshAllCharts: function(){
-        Charts.each(function(chartrow){
-          chartrow.refresh();
-        });
-      },
+      }
 
     });
-
-    // Create App
+    
     window.App = new AppView;
-    function autoRefresh(){
-      window.setTimeout(autoRefresh, 10000);
-      App.refreshAllCharts();
+
+    // Interface
+    window.gui = {
+      openDashboard: function(){
+        App.clearCharts();
+        var packets = new Chart({
+          chartUrl: "charts/Packets-Short.png",
+          descHeader: "Packets",
+          descText: "Packtes transfered in the Network"
+        });
+        var bytes = new Chart({
+          chartUrl: "charts/Bytes-Short.png",
+          descHeader: "Bytes",
+          descText: "Bytes transfered in the Network"
+        });
+        Charts.add([bytes, packets]);
+      },
+      refresh: function(){
+        App.refreshCharts();
+      },
+      clear: function(){
+        App.clearCharts();
+      }
     };
-    autoRefresh();
 
-    // DEBUG
-    // create some basic charts
-    var bytesChart = new ChartRow({ 
-      shortUrl: "/charts/Bytes-Short.png",  
-      midUrl: "/charts/Bytes-Mid.png",  
-      longUrl: "/charts/Bytes-Long.png",  
-      descHeader: "Tranfered Bytes",
-      descText: "All bytes transfered"
-    });
-    Charts.add(bytesChart);
-    
-    var bytesChart = new ChartRow({ 
-      shortUrl: "/charts/Packets-Short.png",  
-      midUrl: "/charts/Packets-Mid.png",  
-      longUrl: "/charts/Packets-Long.png",  
-      descHeader: "Tranfered Packets",
-      descText: "All packets tranfered"
-    });
-    Charts.add(bytesChart);
+    // Bind Interface Controls
+    $("#dashboard").click(gui.openDashboard);
+    $("#refresh-btn").click(gui.refresh);
+    $("#clear-reports").click(gui.clear);
 
-    
-
-    App.addAllCharts();
 
   });
 })(jQuery);

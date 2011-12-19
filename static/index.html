@@ -13,47 +13,34 @@
       <div class="topbar" data-dropdown="dropdown">
         <div class="topbar-inner">
           <div class="container">
-            <h3><a href="#">Vadi</a></h3>
+            <h3><a id="dashboard" href="#">Vadi Dashboard</a></h3>
             <ul class="nav">
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle">Dashboard</a>
-                <ul class="dropdown-menu">
-                  <li><a href="#">New Analysis</a></li>
-                  <li><a href="#">Update Dashboard</a></li>
-                </ul>
-              </li>
-              <li class="dropdown">
                 <a href="#" class="dropdown-toggle">Reports</a>
-                <ul class="dropdown-menu">
-                  <li><a href="#">New Report</a></li>
-                  <li><a href="#">Show Reports</a></li>
+                <ul id="reportsselector" class="dropdown-menu">
+                  <li><a href="#" id="clear-reports">Clear reports</a></li>
                 </ul>
               </li>
             </ul>
-	    <h3><a href="/subnet-report/none">Subnet Report</a></h3>
           </div>
         </div>
       </div>
     </div>
+   
 
     <div class="container">
       <div id="charts" class="span16">
+        <button id="refresh-btn" class="btn">Refresh</button>
       </div>
     </div>
   </div>
   
-  <script type="text/template" id="chartrow-template">
-    <div class="row" id="row-<%= rowId %>">
-      <div class="span4 chart-short">
-        <a href="<%= shortUrl %>" class="lightbox"><img src="<%= shortUrl %>" width="200" /></a>
+  <script type="text/template" id="chart-template">
+    <div class="chart row" id="row-<%= rowId %>">
+      <div class="span12 image">
+        <a href="<%= chartUrl %>" class="lightbox"><img src="<%= chartUrl %>" width="600" /></a>
       </div>
-      <div class="span4 chart-mid">
-        <a href="<%= midUrl %>" class="lightbox"><img src="<%= midUrl %>" width="200" /></a>
-      </div>
-      <div class="span4 chart-long">
-        <a href="<%= longUrl %>" class="lightbox"><img src="<%= longUrl %>" width="200" /></a>
-      </div>
-      <div class="span4 chart desc">
+      <div class="span4 desc">
         <h3><%= descHeader %></h3>       
         <p><%= descText%></p>       
       </div>
