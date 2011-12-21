@@ -1,6 +1,7 @@
 (function($){
   // start once the DOM is ready
   $(function(){
+
     
     // Backbone Models
     window.rowId = 0;
@@ -88,14 +89,32 @@
       },
 
       refreshCharts: function(){
-        Charts.each(function(chart){
-          chart.refresh();
-        });
+        for(var i = Charts.length-1; Charts.at(i).refresh(), i >= 0 ; --i);;
       }
 
     });
     
     window.App = new AppView;
+    
+    // AJAX
+    // Handle reports list
+    function loadReport(){
+      $.get('subnet-report/'+$(this).data('report'), function(data) {
+        var report = new Chart({
+          chartUrl: "subnet-report/" + data['image'],
+          descHeader: "Report",
+          descText: data['text']
+        });
+        Charts.add(report);
+      });
+    }
+
+    $.get('subnet-report/none', function(data) {
+      for(var i = data["reports"].length-1; r = data["reports"][i], i >= 0; --i){
+        var html = $('<li><a href="#" id="' + r + '">' + r + '</a></li>').data('report', r).click(loadReport);
+        $("#reportsselector").append(html);
+      }
+    });
 
     // Interface
     window.gui = {

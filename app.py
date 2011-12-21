@@ -26,9 +26,9 @@ def server_chart(chart):
 def server_static(path):
     return static_file(path,root=os.path.join(os.path.dirname(__file__),"static"))
 
-@get("/subnet-report/imgs/:path#.+#")
+@get("/subnet-report/images/:path#.+#")
 def subnet_report_imgs(path):
-    return static_file(path, root=os.path.join(os.path.dirname(__file__),"imgs"))
+    return static_file(path, root=os.path.join(os.path.dirname(__file__),"images"))
 
 @get("/subnet-report/:report#.+#")
 def server_subnetgraphs(report):

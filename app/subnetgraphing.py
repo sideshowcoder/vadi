@@ -53,7 +53,7 @@ class Report:
             if subnet[3] > 0 or subnet[4] > 0:
                 edge = pydot.Edge(outTraff, node)
         
-        imgName = "imgs/" + self.name  + ".svg"
+        imgName = "images/" + self.name  + ".svg"
         print imgName
         self.graph.write_svg(imgName, prog="dot")
         self.imgFile = imgName
@@ -74,9 +74,10 @@ def show_subnet_reports(report, workdir):
                 reportText = r.reportText
             if r.generateImage():
                 imageFile = r.imgFile
-                
-    return template('app/subnetgraphing', reports=availReports, text=reportText, image=imageFile)
-        
+
+    reports = map(lambda x: x, availReports)
+    return {"reports":reports, "text":reportText, "image":imageFile} 
+ 
 
 def getReportList(workdir):
     reports = dict()
